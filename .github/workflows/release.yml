@@ -93,7 +93,43 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           name: Mail2Go ${{ github.ref_name }}
+          body: |
+            ## Mail2Go ${{ github.ref_name }}
+
+            A lightweight self-hosted mail server built with ASP.NET Core 10, featuring:
+
+            ### ✨ Highlights
+            - **Embedded SMTP server** (SmtpServer 11.x) — receives and stores inbound emails
+            - **ASP.NET Core MVC admin dashboard** — manage domains, mailboxes, and messages
+            - **SQLite storage via EF Core 10** — zero-config, single-file database
+            - **ASP.NET Core Identity** — role-based access control (Admin / User)
+            - **Clean Architecture** — Domain → Application → Infrastructure → Web
+            - **Multi-language client samples** — .NET (SmtpClient & MailKit), Python, Node.js
+
+            ### 📦 Downloads
+            | Platform | File |
+            |----------|------|
+            | Linux x64 | `mail2go-${{ github.ref_name }}-linux-x64.zip` |
+            | Windows x64 | `mail2go-${{ github.ref_name }}-win-x64.zip` |
+            | macOS x64 | `mail2go-${{ github.ref_name }}-osx-x64.zip` |
+
+            Each archive is a **self-contained single-file** executable — no .NET runtime required on the target machine.
+
+            ### 🚀 Quick Start
+            ```bash
+            # Linux / macOS
+            unzip mail2go-${{ github.ref_name }}-linux-x64.zip
+            chmod +x Mail2Go.Web
+            ./Mail2Go.Web
+            # Open http://localhost:5050 — default admin: admin@mail2go.local / pass123
+            ```
+
+            ### ⚠️ Breaking Changes
+            None — first public release.
+
+            ### 🔄 What's Changed
+          append_body: true
+          generate_release_notes: true
           draft: false
           prerelease: ${{ contains(github.ref_name, '-') }}
-          generate_release_notes: true
           files: artifacts/*.zip
