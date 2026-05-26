@@ -13,7 +13,4 @@
     <Project Path="tests/Mail2Go.IntegrationTests/Mail2Go.IntegrationTests.csproj" />
     <Project Path="tests/Mail2Go.UnitTests/Mail2Go.UnitTests.csproj" />
   </Folder>
-  <Folder Name="/tools/">
-    <Project Path="tools/Mail2Go.DemoSeeder/Mail2Go.DemoSeeder.csproj" />
-  </Folder>
 </Solution>
