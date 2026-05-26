@@ -4,9 +4,18 @@ on:
   push:
     tags:
       - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: 'Release tag (e.g. v0.1.0)'
+        required: true
+        default: 'v0.1.0'
 
 permissions:
   contents: write   # needed to create GitHub releases
+
+env:
+  RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
 
 jobs:
   # ── Build & Test ─────────────────────────────────────────────
@@ -66,13 +75,13 @@ jobs:
       - name: Zip artifact
         run: |
           cd publish
-          zip -r ../mail2go-${{ github.ref_name }}-${{ matrix.label }}.zip ${{ matrix.rid }}/
+          zip -r ../mail2go-${{ env.RELEASE_TAG }}-${{ matrix.label }}.zip ${{ matrix.rid }}/
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: mail2go-${{ matrix.label }}
-          path: mail2go-${{ github.ref_name }}-${{ matrix.label }}.zip
+          path: mail2go-${{ env.RELEASE_TAG }}-${{ matrix.label }}.zip
           retention-days: 1
 
   # ── Create GitHub Release ─────────────────────────────────────
@@ -92,9 +101,10 @@ jobs:
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          name: Mail2Go ${{ github.ref_name }}
+          tag_name: ${{ env.RELEASE_TAG }}
+          name: Mail2Go ${{ env.RELEASE_TAG }}
           body: |
-            ## Mail2Go ${{ github.ref_name }}
+            ## Mail2Go ${{ env.RELEASE_TAG }}
 
             A lightweight self-hosted mail server built with ASP.NET Core 10, featuring:
 
@@ -109,16 +119,16 @@ jobs:
             ### 📦 Downloads
             | Platform | File |
             |----------|------|
-            | Linux x64 | `mail2go-${{ github.ref_name }}-linux-x64.zip` |
-            | Windows x64 | `mail2go-${{ github.ref_name }}-win-x64.zip` |
-            | macOS x64 | `mail2go-${{ github.ref_name }}-osx-x64.zip` |
+            | Linux x64 | `mail2go-${{ env.RELEASE_TAG }}-linux-x64.zip` |
+            | Windows x64 | `mail2go-${{ env.RELEASE_TAG }}-win-x64.zip` |
+            | macOS x64 | `mail2go-${{ env.RELEASE_TAG }}-osx-x64.zip` |
 
             Each archive is a **self-contained single-file** executable — no .NET runtime required on the target machine.
 
             ### 🚀 Quick Start
             ```bash
             # Linux / macOS
-            unzip mail2go-${{ github.ref_name }}-linux-x64.zip
+            unzip mail2go-${{ env.RELEASE_TAG }}-linux-x64.zip
             chmod +x Mail2Go.Web
             ./Mail2Go.Web
             # Open http://localhost:5050 — default admin: admin@mail2go.local / pass123
@@ -131,5 +141,5 @@ jobs:
           append_body: true
           generate_release_notes: true
           draft: false
-          prerelease: ${{ contains(github.ref_name, '-') }}
+          prerelease: ${{ contains(env.RELEASE_TAG, '-') }}
           files: artifacts/*.zip
