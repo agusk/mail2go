@@ -18,11 +18,12 @@ namespace Mail2Go.IntegrationTests.Smtp;
 public sealed class SmtpSendTests : IClassFixture<CustomWebApplicationFactory>
 {
     private readonly CustomWebApplicationFactory _factory;
-    private readonly int _port = CustomWebApplicationFactory.SmtpTestPort;
+    private readonly int _port;
 
     public SmtpSendTests(CustomWebApplicationFactory factory)
     {
         _factory = factory;
+        _port    = factory.SmtpTestPort;
         // Trigger server initialization by creating any HttpClient
         // (WebApplicationFactory is lazy — this ensures the host is started).
         _ = factory.CreateClient();
