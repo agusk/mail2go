@@ -3,6 +3,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+# Demo / development tools (not part of the distributed project)
+tools/
+
 # User-specific files
 *.rsuser
 *.suo
@@ -427,3 +430,8 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+
+bin/
+obj/
+
+TECHNICAL_DESIGN*.md

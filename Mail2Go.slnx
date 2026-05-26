@@ -1,0 +1,19 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Mail2Go.Application/Mail2Go.Application.csproj" />
+    <Project Path="src/Mail2Go.Domain/Mail2Go.Domain.csproj" />
+    <Project Path="src/Mail2Go.Infrastructure/Mail2Go.Infrastructure.csproj" />
+    <Project Path="src/Mail2Go.Web/Mail2Go.Web.csproj" />
+  </Folder>
+  <Folder Name="/src/Mail2Go.Clients/">
+    <Project Path="src/Mail2Go.Clients/MailKitSample/MailKitSample.csproj" />
+    <Project Path="src/Mail2Go.Clients/SmtpClientSample/SmtpClientSample.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Mail2Go.IntegrationTests/Mail2Go.IntegrationTests.csproj" />
+    <Project Path="tests/Mail2Go.UnitTests/Mail2Go.UnitTests.csproj" />
+  </Folder>
+  <Folder Name="/tools/">
+    <Project Path="tools/Mail2Go.DemoSeeder/Mail2Go.DemoSeeder.csproj" />
+  </Folder>
+</Solution>

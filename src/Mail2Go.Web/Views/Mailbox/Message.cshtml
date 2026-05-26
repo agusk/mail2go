@@ -1,0 +1,60 @@
+@using Mail2Go.Domain.Emails
+@model EmailMessage
+@{
+    ViewData["Title"] = Model.Subject ?? "(no subject)";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>@(Model.Subject ?? "(no subject)")</h2>
+    <div>
+        <a asp-action="Raw" asp-route-id="@Model.Id" class="btn btn-sm btn-outline-secondary" target="_blank">View Raw</a>
+        <form asp-action="Delete" asp-route-id="@Model.Id" method="post" class="d-inline">
+            <button type="submit" class="btn btn-sm btn-outline-danger"
+                    onclick="return confirm(''Delete this message?'')">Delete</button>
+        </form>
+        <a asp-action="Index" class="btn btn-sm btn-secondary">Back</a>
+    </div>
+</div>
+
+<div class="card mb-3">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-2">From</dt>
+            <dd class="col-sm-10">@Model.FromAddress</dd>
+
+            @foreach (var r in Model.Recipients.Where(r => r.Type == RecipientType.To))
+            {
+                <dt class="col-sm-2">To</dt>
+                <dd class="col-sm-10">@r.Address</dd>
+            }
+            @foreach (var r in Model.Recipients.Where(r => r.Type == RecipientType.Cc))
+            {
+                <dt class="col-sm-2">Cc</dt>
+                <dd class="col-sm-10">@r.Address</dd>
+            }
+
+            <dt class="col-sm-2">Received</dt>
+            <dd class="col-sm-10">@Model.ReceivedAt.ToString("yyyy-MM-dd HH:mm:ss") UTC</dd>
+
+            <dt class="col-sm-2">Message-ID</dt>
+            <dd class="col-sm-10"><small class="text-muted">@Model.InternetMessageId</small></dd>
+        </dl>
+    </div>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        @if (!string.IsNullOrEmpty(Model.HtmlBody))
+        {
+            <iframe srcdoc="@Model.HtmlBody" style="width:100%;min-height:400px;border:none;" sandbox="allow-same-origin"></iframe>
+        }
+        else if (!string.IsNullOrEmpty(Model.TextBody))
+        {
+            <pre style="white-space:pre-wrap;">@Model.TextBody</pre>
+        }
+        else
+        {
+            <p class="text-muted">(empty body)</p>
+        }
+    </div>
+</div>

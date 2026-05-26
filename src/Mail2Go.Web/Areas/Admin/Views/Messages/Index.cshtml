@@ -1,0 +1,183 @@
+@using Mail2Go.Domain.Emails
+@using Mail2Go.Web.Areas.Admin.ViewModels
+@model MessagesIndexViewModel
+@{
+    ViewData["Title"] = "All Messages";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="webmail-container">
+    <!-- ===== Left pane: list ===== -->
+    <div class="webmail-list">
+        <div class="webmail-toolbar">
+            <a asp-area="Admin" asp-controller="Messages" asp-action="Compose"
+               class="btn btn-primary btn-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2.5">
+                    <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+                </svg>
+                Compose
+            </a>
+            <span class="badge bg-secondary rounded-pill ms-auto">@Model.Messages.Count</span>
+        </div>
+
+        <div class="webmail-items">
+            @if (!Model.Messages.Any())
+            {
+                <div class="webmail-empty">No messages yet</div>
+            }
+            @foreach (var msg in Model.Messages)
+            {
+                var isActive = Model.SelectedId == msg.Id;
+                <a href="@Url.Action("Index", new { selected = msg.Id })"
+                   class="webmail-item @(isActive ? "active" : "")">
+                    <div class="d-flex align-items-center justify-content-between mb-1">
+                        <span class="webmail-item-from">@(msg.FromAddress ?? "—")</span>
+                        <span class="webmail-item-date">@msg.ReceivedAt.ToString("MM-dd HH:mm")</span>
+                    </div>
+                    <div class="webmail-item-subject">@(msg.Subject ?? "(no subject)")</div>
+                    <div class="webmail-item-preview">
+                        @(msg.TextBody is not null && msg.TextBody.Length > 80 ? msg.TextBody[..80] + "…" : msg.TextBody ?? "")
+                    </div>
+                </a>
+            }
+        </div>
+    </div>
+
+    <!-- ===== Drag resizer ===== -->
+    <div class="webmail-resizer" id="webmailResizer" title="Drag to resize"></div>
+
+    <!-- ===== Right pane: detail ===== -->
+    <div class="webmail-detail">
+        @if (Model.Selected is null)
+        {
+            <div class="webmail-detail-empty">
+                <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.25">
+                    <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                    <polyline points="22,6 12,13 2,6"/>
+                </svg>
+                <p class="mt-3 mb-0">Select a message to read</p>
+            </div>
+        }
+        else
+        {
+            var msg = Model.Selected;
+            var toRecipients = msg.Recipients.Where(r => r.Type == RecipientType.To).ToList();
+            var ccRecipients = msg.Recipients.Where(r => r.Type == RecipientType.Cc).ToList();
+
+            <div class="webmail-detail-header">
+                <div class="webmail-detail-actions">
+                    <a asp-area="Admin" asp-controller="Messages" asp-action="Compose"
+                       asp-route-to="@msg.FromAddress"
+                       asp-route-subject="@("Re: " + (msg.Subject ?? ""))"
+                       class="btn btn-sm btn-outline-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/>
+                        </svg>
+                        Reply
+                    </a>
+                    <form asp-area="Admin" asp-controller="Messages" asp-action="Delete"
+                          asp-route-id="@msg.Id" method="post" class="d-inline"
+                          onsubmit="return confirm('Delete this message?')">
+                        <button type="submit" class="btn btn-sm btn-outline-danger">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24"
+                                 fill="none" stroke="currentColor" stroke-width="2">
+                                <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/>
+                                <path d="M10 11v6"/><path d="M14 11v6"/>
+                                <path d="M9 6V4h6v2"/>
+                            </svg>
+                            Delete
+                        </button>
+                    </form>
+                    <a asp-area="Admin" asp-controller="Messages" asp-action="Raw" asp-route-id="@msg.Id"
+                       class="btn btn-sm btn-outline-secondary" target="_blank">Raw</a>
+                </div>
+            </div>
+
+            <div class="webmail-detail-meta">
+                <h5 class="webmail-detail-subject">@(msg.Subject ?? "(no subject)")</h5>
+                <div class="webmail-detail-fields">
+                    <div class="webmail-meta-row">
+                        <span class="webmail-meta-label">From</span>
+                        <span>@(msg.FromAddress ?? "—")</span>
+                    </div>
+                    @if (toRecipients.Any())
+                    {
+                        <div class="webmail-meta-row">
+                            <span class="webmail-meta-label">To</span>
+                            <span>@string.Join(", ", toRecipients.Select(r => r.Address))</span>
+                        </div>
+                    }
+                    @if (ccRecipients.Any())
+                    {
+                        <div class="webmail-meta-row">
+                            <span class="webmail-meta-label">Cc</span>
+                            <span>@string.Join(", ", ccRecipients.Select(r => r.Address))</span>
+                        </div>
+                    }
+                    <div class="webmail-meta-row">
+                        <span class="webmail-meta-label">Date</span>
+                        <span>@msg.ReceivedAt.ToString("yyyy-MM-dd HH:mm:ss") UTC</span>
+                    </div>
+                    <div class="webmail-meta-row">
+                        <span class="webmail-meta-label">Source</span>
+                        <span class="badge bg-secondary">@msg.Source</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="webmail-detail-body">
+                @if (!string.IsNullOrWhiteSpace(msg.HtmlBody))
+                {
+                    <iframe class="webmail-body-frame" srcdoc="@msg.HtmlBody" sandbox="allow-same-origin"></iframe>
+                }
+                else if (!string.IsNullOrWhiteSpace(msg.TextBody))
+                {
+                    <pre class="webmail-body-text">@msg.TextBody</pre>
+                }
+                else
+                {
+                    <p class="text-secondary fst-italic">(empty body)</p>
+                }
+            </div>
+        }
+    </div>
+</div>
+
+@section Scripts {
+<script>
+(function () {
+    const resizer = document.getElementById('webmailResizer');
+    const list    = resizer?.previousElementSibling;
+    const detail  = resizer?.nextElementSibling;
+    if (!resizer || !list || !detail) return;
+
+    const MIN = 180, MAX = 600;
+    let dragging = false, startX = 0, startW = 0;
+
+    resizer.addEventListener('mousedown', function (e) {
+        dragging = true;
+        startX = e.clientX;
+        startW = list.getBoundingClientRect().width;
+        document.body.style.cursor = 'col-resize';
+        document.body.style.userSelect = 'none';
+        e.preventDefault();
+    });
+
+    document.addEventListener('mousemove', function (e) {
+        if (!dragging) return;
+        const w = Math.min(MAX, Math.max(MIN, startW + e.clientX - startX));
+        list.style.width = w + 'px';
+    });
+
+    document.addEventListener('mouseup', function () {
+        if (!dragging) return;
+        dragging = false;
+        document.body.style.cursor = '';
+        document.body.style.userSelect = '';
+    });
+})();
+</script>
+}

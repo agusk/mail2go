@@ -1,0 +1,32 @@
+services:
+  mail2go:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: mail2go
+    restart: unless-stopped
+    ports:
+      - "5050:5050"   # Web UI
+      - "2525:2525"   # SMTP
+    volumes:
+      - mail2go_data:/app/data
+    environment:
+      # Web
+      ASPNETCORE_URLS: "http://+:5050"
+      ASPNETCORE_ENVIRONMENT: Production
+      # Database — stored in the named volume
+      ConnectionStrings__DefaultConnection: "Data Source=/app/data/mail2go.db"
+      # SMTP server settings
+      Smtp__Host: "0.0.0.0"
+      Smtp__Port: "2525"
+      Smtp__EnableTls: "false"
+      Smtp__RequireAuthentication: "true"
+      Smtp__AllowAnonymous: "false"
+      Smtp__MaxMessageSizeBytes: "10485760"
+      # Mail2Go behaviour
+      Mail2Go__AllowUnknownDomains: "true"
+      Mail2Go__AllowUnknownRecipients: "true"
+
+volumes:
+  mail2go_data:
+    driver: local

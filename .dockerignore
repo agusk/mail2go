@@ -1,0 +1,26 @@
+# Git
+.git/
+.gitignore
+
+# Build outputs
+**/bin/
+**/obj/
+
+# Test projects (not needed in image)
+tests/
+
+# Docs and assets
+docs/
+assets/
+
+# IDE
+.vs/
+*.user
+*.suo
+.vscode/
+
+# Local data
+data/
+
+# Design docs
+TECHNICAL_DESIGN*.md

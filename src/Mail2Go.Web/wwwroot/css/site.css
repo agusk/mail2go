@@ -1,0 +1,555 @@
+/* ===== Mail2Go � Professional Theme ===== */
+
+:root {
+    --sidebar-width: 240px;
+    --sidebar-bg: #1a1d23;
+    --sidebar-border: #2d3139;
+    --sidebar-text: #a8b0c0;
+    --sidebar-text-active: #ffffff;
+    --sidebar-accent: #4f8ef7;
+    --topbar-height: 56px;
+    --transition: 0.2s ease;
+}
+
+[data-bs-theme="light"] {
+    --sidebar-bg: #f0f2f5;
+    --sidebar-border: #dee2e6;
+    --sidebar-text: #495057;
+    --sidebar-text-active: #212529;
+    --sidebar-accent: #0d6efd;
+}
+
+/* ===== Layout ===== */
+html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+.app-wrapper {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    height: calc(100vh - var(--topbar-height));
+    margin-top: var(--topbar-height);
+}
+
+/* ===== Top Navbar ===== */
+.topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--topbar-height);
+    z-index: 1030;
+    display: flex;
+    align-items: center;
+    padding: 0 1.25rem;
+    gap: 1rem;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    backdrop-filter: blur(8px);
+}
+
+[data-bs-theme="dark"] .topbar {
+    background: rgba(18, 20, 26, 0.95);
+}
+
+[data-bs-theme="light"] .topbar {
+    background: rgba(255, 255, 255, 0.95);
+    border-bottom-color: #dee2e6;
+}
+
+.topbar .brand {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    text-decoration: none;
+    font-weight: 700;
+    font-size: 1.15rem;
+    letter-spacing: -0.3px;
+    white-space: nowrap;
+}
+
+[data-bs-theme="dark"] .topbar .brand { color: #ffffff; }
+[data-bs-theme="light"] .topbar .brand { color: #212529; }
+
+.topbar .brand img {
+    width: 28px;
+    height: 28px;
+}
+
+.topbar-right {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.topbar-user {
+    font-size: 0.85rem;
+    opacity: 0.75;
+}
+
+/* ===== Sidebar ===== */
+.sidebar {
+    width: var(--sidebar-width);
+    flex-shrink: 0;
+    background: var(--sidebar-bg);
+    border-right: 1px solid var(--sidebar-border);
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 0;
+}
+
+.sidebar-section-label {
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--sidebar-text);
+    opacity: 0.5;
+    padding: 1rem 1.25rem 0.35rem;
+}
+
+.sidebar-nav {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar-nav .nav-item a {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    padding: 0.55rem 1.25rem;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    font-size: 0.88rem;
+    border-radius: 0;
+    transition: all var(--transition);
+    border-left: 3px solid transparent;
+}
+
+.sidebar-nav .nav-item a:hover {
+    color: var(--sidebar-text-active);
+    background: rgba(79, 142, 247, 0.08);
+}
+
+.sidebar-nav .nav-item a.active,
+.sidebar-nav .nav-item a[aria-current="page"] {
+    color: var(--sidebar-text-active);
+    background: rgba(79, 142, 247, 0.12);
+    border-left-color: var(--sidebar-accent);
+}
+
+.sidebar-nav .nav-item a svg {
+    width: 16px;
+    height: 16px;
+    opacity: 0.75;
+    flex-shrink: 0;
+}
+
+/* ===== Main Content ===== */
+.main-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.75rem 2rem;
+}
+
+/* When hosting webmail, remove scroll from main-content */
+.main-content:has(.webmail-container) {
+    overflow: hidden;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.webmail-container {
+    flex: 1;
+    overflow: hidden;
+}
+
+/* ===== Page Header ===== */
+.page-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.page-title {
+    font-size: 1.35rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+/* ===== Cards ===== */
+.card {
+    border-radius: 10px;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+    border: 1px solid;
+}
+
+[data-bs-theme="dark"] .card {
+    border-color: rgba(255,255,255,0.07);
+    background: #1e2128;
+}
+
+[data-bs-theme="light"] .card {
+    border-color: #e9ecef;
+    background: #ffffff;
+}
+
+/* ===== Stats Cards ===== */
+.stat-card {
+    border-radius: 12px;
+    padding: 1.35rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+}
+
+[data-bs-theme="dark"] .stat-card { background: #1e2128; border: 1px solid rgba(255,255,255,0.07); }
+[data-bs-theme="light"] .stat-card { background: #ffffff; border: 1px solid #e9ecef; box-shadow: 0 1px 4px rgba(0,0,0,0.05); }
+
+.stat-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.stat-icon svg { width: 22px; height: 22px; }
+.stat-value { font-size: 1.9rem; font-weight: 700; line-height: 1; }
+.stat-label { font-size: 0.8rem; opacity: 0.6; margin-top: 0.2rem; }
+
+/* ===== Tables ===== */
+.table {
+    font-size: 0.875rem;
+}
+
+.table thead th {
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    opacity: 0.6;
+    border-bottom-width: 1px;
+    padding: 0.65rem 0.75rem;
+}
+
+.table td { padding: 0.7rem 0.75rem; vertical-align: middle; }
+.table-hover tbody tr { transition: background var(--transition); }
+
+/* ===== Badges ===== */
+.badge { font-weight: 500; font-size: 0.73rem; letter-spacing: 0.2px; padding: 0.35em 0.65em; }
+
+/* ===== Buttons ===== */
+.btn { font-size: 0.85rem; font-weight: 500; border-radius: 7px; }
+.btn-sm { font-size: 0.8rem; padding: 0.3rem 0.7rem; border-radius: 6px; }
+
+/* ===== Forms ===== */
+.form-control, .form-select {
+    border-radius: 8px;
+    font-size: 0.875rem;
+}
+
+.form-label { font-size: 0.825rem; font-weight: 500; margin-bottom: 0.35rem; }
+
+/* ===== Login Page ===== */
+.login-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login-card {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 16px;
+    padding: 2.5rem;
+}
+
+[data-bs-theme="dark"] .login-card { background: #1e2128; border: 1px solid rgba(255,255,255,0.07); }
+[data-bs-theme="light"] .login-card { background: #ffffff; border: 1px solid #e9ecef; box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+
+/* ===== Email list ===== */
+.email-row { cursor: pointer; }
+.email-row:hover { text-decoration: none; }
+.email-subject { font-weight: 500; }
+.email-from { font-size: 0.82rem; opacity: 0.7; }
+.email-date { font-size: 0.78rem; opacity: 0.55; white-space: nowrap; }
+
+/* ===== Theme toggle ===== */
+.theme-toggle {
+    background: none;
+    border: 1px solid;
+    border-radius: 8px;
+    padding: 0.35rem;
+    cursor: pointer;
+    transition: all var(--transition);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+}
+
+.theme-toggle svg {
+    width: 16px;
+    height: 16px;
+    display: block;
+    flex-shrink: 0;
+}
+
+[data-bs-theme="dark"] .theme-toggle {
+    border-color: rgba(255,255,255,0.15);
+    color: rgba(255,255,255,0.7);
+}
+[data-bs-theme="dark"] .theme-toggle:hover {
+    border-color: rgba(255,255,255,0.35);
+    color: #fff;
+}
+[data-bs-theme="light"] .theme-toggle {
+    border-color: #ced4da;
+    color: #495057;
+}
+[data-bs-theme="light"] .theme-toggle:hover {
+    border-color: #6c757d;
+    color: #212529;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 768px) {
+    .sidebar { display: none; }
+    .main-content { padding: 1rem; }
+}
+
+/* ===== Webmail Split Layout ===== */
+.webmail-container {
+    display: flex;
+    height: 100%;
+    overflow: hidden;
+}
+
+.webmail-list {
+    width: 300px;
+    min-width: 180px;
+    max-width: 600px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    border-right: none; /* border replaced by resizer */
+    overflow: hidden;
+}
+
+.webmail-resizer {
+    width: 5px;
+    flex-shrink: 0;
+    cursor: col-resize;
+    background: transparent;
+    border-right: 1px solid;
+    transition: background 0.15s;
+    position: relative;
+    z-index: 1;
+}
+[data-bs-theme="dark"]  .webmail-resizer { border-right-color: rgba(255,255,255,0.08); }
+[data-bs-theme="light"] .webmail-resizer { border-right-color: #dee2e6; }
+.webmail-resizer:hover,
+.webmail-resizer:active { background: rgba(79,142,247,0.25); border-right-color: var(--sidebar-accent); }
+
+.webmail-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid;
+    flex-shrink: 0;
+}
+
+[data-bs-theme="dark"] .webmail-toolbar { border-bottom-color: rgba(255,255,255,0.08); }
+[data-bs-theme="light"] .webmail-toolbar { border-bottom-color: #dee2e6; }
+
+.webmail-items {
+    flex: 1;
+    overflow-y: auto;
+}
+
+.webmail-empty {
+    padding: 2rem 1rem;
+    text-align: center;
+    font-size: 0.85rem;
+    opacity: 0.5;
+}
+
+.webmail-item {
+    display: block;
+    padding: 0.75rem 1rem;
+    border-bottom: 1px solid;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background var(--transition);
+}
+
+[data-bs-theme="dark"] .webmail-item {
+    border-bottom-color: rgba(255,255,255,0.05);
+    color: var(--sidebar-text);
+}
+[data-bs-theme="light"] .webmail-item {
+    border-bottom-color: #e9ecef;
+    color: #495057;
+}
+
+.webmail-item:hover {
+    background: rgba(79, 142, 247, 0.08);
+    color: inherit;
+}
+
+.webmail-item.active {
+    background: rgba(79, 142, 247, 0.15);
+    border-left: 3px solid var(--sidebar-accent);
+}
+
+[data-bs-theme="dark"] .webmail-item.active { color: #fff; }
+[data-bs-theme="light"] .webmail-item.active { color: #212529; }
+
+.webmail-item-from {
+    font-size: 0.82rem;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 140px;
+}
+
+.webmail-item-date {
+    font-size: 0.72rem;
+    opacity: 0.55;
+    white-space: nowrap;
+    flex-shrink: 0;
+}
+
+.webmail-item-subject {
+    font-size: 0.84rem;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin-bottom: 0.2rem;
+}
+
+.webmail-item-preview {
+    font-size: 0.76rem;
+    opacity: 0.5;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.webmail-detail {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.webmail-detail-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    opacity: 0.4;
+    font-size: 0.9rem;
+}
+
+.webmail-detail-header {
+    padding: 0.75rem 1.25rem;
+    border-bottom: 1px solid;
+    flex-shrink: 0;
+}
+
+[data-bs-theme="dark"] .webmail-detail-header { border-bottom-color: rgba(255,255,255,0.08); }
+[data-bs-theme="light"] .webmail-detail-header { border-bottom-color: #dee2e6; }
+
+.webmail-detail-actions {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+}
+
+.webmail-detail-meta {
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid;
+    flex-shrink: 0;
+}
+
+[data-bs-theme="dark"] .webmail-detail-meta { border-bottom-color: rgba(255,255,255,0.08); }
+[data-bs-theme="light"] .webmail-detail-meta { border-bottom-color: #dee2e6; }
+
+.webmail-detail-subject {
+    font-size: 1.05rem;
+    font-weight: 600;
+    margin-bottom: 0.65rem;
+}
+
+.webmail-detail-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.webmail-meta-row {
+    display: flex;
+    align-items: baseline;
+    gap: 0.65rem;
+    font-size: 0.82rem;
+}
+
+.webmail-meta-label {
+    font-weight: 600;
+    opacity: 0.5;
+    min-width: 48px;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.webmail-detail-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1.25rem;
+}
+
+.webmail-body-frame {
+    width: 100%;
+    height: 100%;
+    border: none;
+    background: #fff;
+    border-radius: 6px;
+    min-height: 300px;
+}
+
+.webmail-body-text {
+    font-family: 'Courier New', monospace;
+    font-size: 0.85rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+    margin: 0;
+    line-height: 1.6;
+}
+
+@media (max-width: 768px) {
+    .webmail-container { flex-direction: column; }
+    .webmail-list { width: 100%; max-height: 280px; border-right: none; border-bottom: 1px solid #dee2e6; }
+}
