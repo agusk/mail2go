@@ -1,0 +1,35 @@
+@model Mail2Go.Web.ViewModels.Account.LoginViewModel
+@{
+    ViewData["Title"] = "Sign In";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="login-wrapper">
+    <div class="login-card">
+        <div class="text-center mb-4">
+            <img src="/images/mail2go.svg" alt="Mail2Go" width="52" height="52" class="mb-3" />
+            <h1 class="h4 fw-bold mb-0">Sign in to Mail2Go</h1>
+            <p class="text-secondary mt-1" style="font-size:0.85rem">Internal mail platform</p>
+        </div>
+
+        @if (!string.IsNullOrEmpty(ViewData["Error"] as string))
+        {
+            <div class="alert alert-danger py-2 mb-3" style="font-size:0.85rem">@ViewData["Error"]</div>
+        }
+
+        <form asp-action="Login" method="post">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2 mb-3" style="font-size:0.85rem" role="alert"></div>
+            <div class="mb-3">
+                <label asp-for="UsernameOrEmail" class="form-label">Email or username</label>
+                <input asp-for="UsernameOrEmail" class="form-control" placeholder="you@mail2go.local" autocomplete="username" autofocus />
+                <span asp-validation-for="UsernameOrEmail" class="text-danger" style="font-size:0.8rem"></span>
+            </div>
+            <div class="mb-4">
+                <label asp-for="Password" class="form-label">Password</label>
+                <input asp-for="Password" class="form-control" type="password" placeholder="��������" autocomplete="current-password" />
+                <span asp-validation-for="Password" class="text-danger" style="font-size:0.8rem"></span>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">Sign in</button>
+        </form>
+    </div>
+</div>

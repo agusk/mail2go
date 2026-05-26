@@ -1,0 +1,13 @@
+{
+  "name": "mail2go-nodejs-smtp-sample",
+  "version": "1.0.0",
+  "description": "Mail2Go — Sample SMTP client using Node.js + nodemailer",
+  "type": "module",
+  "main": "send_mail.js",
+  "scripts": {
+    "start": "node send_mail.js"
+  },
+  "dependencies": {
+    "nodemailer": "^6.9.16"
+  }
+}

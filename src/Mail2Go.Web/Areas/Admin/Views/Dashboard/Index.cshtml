@@ -1,0 +1,131 @@
+@using Mail2Go.Application.UseCases.Queries
+@model DashboardResult
+@{
+    ViewData["Title"] = "Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="page-header">
+    <h1 class="page-title">Dashboard</h1>
+    <span class="text-secondary" style="font-size:0.82rem">@DateTime.UtcNow.ToString("dddd, MMMM d, yyyy") UTC</span>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-sm-6 col-lg-3">
+        <div class="stat-card">
+            <div class="stat-icon bg-primary bg-opacity-15">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#4f8ef7" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+            <div>
+                <div class="stat-value">@Model.TotalMessages</div>
+                <div class="stat-label">Total Messages</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="stat-card">
+            <div class="stat-icon bg-success bg-opacity-15">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#28a745" stroke-width="2"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+            </div>
+            <div>
+                <div class="stat-value">@Model.TotalMailboxes</div>
+                <div class="stat-label">Mailboxes</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="stat-card">
+            <div class="stat-icon bg-warning bg-opacity-15">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#b45309" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </div>
+            <div>
+                <div class="stat-value">@Model.TotalDomains</div>
+                <div class="stat-label">Domains</div>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-6 col-lg-3">
+        <div class="stat-card">
+            <div class="stat-icon bg-info bg-opacity-15">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="#17a2b8" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <div>
+                <div class="stat-value">@Model.TotalMailboxes</div>
+                <div class="stat-label">Users</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-3">
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header d-flex justify-content-between align-items-center py-2">
+                <span class="fw-semibold" style="font-size:0.9rem">Quick Actions</span>
+            </div>
+            <div class="card-body d-flex flex-column gap-2">
+                <a asp-area="Admin" asp-controller="Domains" asp-action="Create" class="btn btn-outline-primary btn-sm text-start">
+                    + Add Domain
+                </a>
+                <a asp-area="Admin" asp-controller="Mailboxes" asp-action="Create" class="btn btn-outline-success btn-sm text-start">
+                    + Add Mailbox
+                </a>
+                <a asp-area="Admin" asp-controller="Messages" asp-action="Index" class="btn btn-outline-secondary btn-sm text-start">
+                    View All Messages
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header py-2">
+                <span class="fw-semibold" style="font-size:0.9rem">SMTP Server</span>
+            </div>
+            <div class="card-body">
+                <div class="d-flex align-items-center gap-2 mb-2">
+                    <span class="badge bg-success">Running</span>
+                    <span class="text-secondary" style="font-size:0.82rem">Port 2525</span>
+                </div>
+                <code class="small">smtp://localhost:2525</code>
+                <div class="mt-3">
+                    <button type="button" class="btn btn-sm btn-outline-primary" id="btnTestSmtp">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 16 12 14 15 10 15 8 12 2 12"/><path d="M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z"/></svg>
+                        Test Connection
+                    </button>
+                    <span id="smtpTestResult" class="ms-2" style="font-size:0.82rem"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+(function () {
+    var btn = document.getElementById("btnTestSmtp");
+    if (!btn) return;
+    btn.addEventListener("click", function () {
+        var result = document.getElementById("smtpTestResult");
+        btn.disabled = true;
+        result.textContent = "Testing...";
+        result.className = "ms-2 text-secondary";
+        fetch("/Admin/Dashboard/SmtpPing", { method: "POST" })
+            .then(function (r) { return r.json(); })
+            .then(function (d) {
+                if (d.ok) {
+                    result.textContent = "Connected \u2713";
+                    result.className = "ms-2 text-success fw-semibold";
+                } else {
+                    result.textContent = "Failed: " + (d.error || "Unknown");
+                    result.className = "ms-2 text-danger";
+                }
+            })
+            .catch(function () {
+                result.textContent = "Connection failed";
+                result.className = "ms-2 text-danger";
+            })
+            .finally(function () { btn.disabled = false; });
+    });
+})();
+</script>
+}

@@ -1,0 +1,46 @@
+@model Mail2Go.Web.ViewModels.Compose.ComposeViewModel
+@{
+    ViewData["Title"] = "Compose";
+}
+
+<div class="page-header">
+    <h1 class="page-title">Compose Message</h1>
+    <a asp-action="Index" class="btn btn-sm btn-outline-secondary">? Back to Inbox</a>
+</div>
+
+<div class="card" style="max-width:760px">
+    <div class="card-body">
+        <form asp-action="Compose" method="post">
+            <div asp-validation-summary="ModelOnly" class="alert alert-danger py-2" style="font-size:0.85rem" role="alert"></div>
+            <div class="mb-3">
+                <label asp-for="To" class="form-label">To</label>
+                <input asp-for="To" class="form-control" placeholder="recipient@example.com" />
+                <span asp-validation-for="To" class="text-danger" style="font-size:0.8rem"></span>
+            </div>
+            <div class="row g-3 mb-3">
+                <div class="col">
+                    <label asp-for="Cc" class="form-label">Cc</label>
+                    <input asp-for="Cc" class="form-control" placeholder="cc@example.com" />
+                </div>
+                <div class="col">
+                    <label asp-for="Bcc" class="form-label">Bcc</label>
+                    <input asp-for="Bcc" class="form-control" placeholder="bcc@example.com" />
+                </div>
+            </div>
+            <div class="mb-3">
+                <label asp-for="Subject" class="form-label">Subject</label>
+                <input asp-for="Subject" class="form-control" placeholder="Email subject" />
+                <span asp-validation-for="Subject" class="text-danger" style="font-size:0.8rem"></span>
+            </div>
+            <div class="mb-4">
+                <label asp-for="Body" class="form-label">Message</label>
+                <textarea asp-for="Body" class="form-control" rows="12" placeholder="Write your message here..."></textarea>
+                <span asp-validation-for="Body" class="text-danger" style="font-size:0.8rem"></span>
+            </div>
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">Send Message</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>

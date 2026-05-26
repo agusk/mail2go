@@ -1,0 +1,60 @@
+@using Mail2Go.Application.UseCases.Queries
+@model IReadOnlyList<GetMyMailboxResult>
+@{
+    ViewData["Title"] = "Inbox";
+}
+
+<div class="page-header">
+    <h1 class="page-title">Inbox</h1>
+    <a asp-action="Compose" class="btn btn-primary btn-sm">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14" style="margin-right:4px"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+        Compose
+    </a>
+</div>
+
+@foreach (var mailbox in Model)
+{
+    <div class="mb-4">
+        <div class="d-flex align-items-center gap-2 mb-2">
+            <span class="fw-semibold" style="font-size:0.85rem">@mailbox.Address</span>
+            <span class="badge bg-secondary rounded-pill">@mailbox.Messages.Count</span>
+        </div>
+        <div class="card">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead>
+                        <tr>
+                            <th>From</th>
+                            <th>Subject</th>
+                            <th>Received</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (!mailbox.Messages.Any())
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center text-secondary py-4">No messages</td>
+                            </tr>
+                        }
+                        @foreach (var msg in mailbox.Messages)
+                        {
+                            <tr class="email-row" onclick="window.location='@Url.Action("Message", new { id = msg.Id })'">
+                                <td class="email-from">@(msg.FromAddress ?? "–")</td>
+                                <td><span class="email-subject">@(msg.Subject ?? "(no subject)")</span></td>
+                                <td class="email-date">@msg.ReceivedAt.ToString("yyyy-MM-dd HH:mm")</td>
+                                <td onclick="event.stopPropagation()">
+                                    <form asp-action="Delete" asp-route-id="@msg.Id" method="post">
+                                        <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                onclick="return confirm(''Delete?'')">×</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+
